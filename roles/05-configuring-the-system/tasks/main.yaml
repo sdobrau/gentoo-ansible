@@ -1,0 +1,25 @@
+---
+- name: place a properly formatted fstab
+	ansible.builtin.copy:
+		src: files/for-build/fstab
+		dest: /mnt/gentoo/etc/fstab
+- name: emerge dhcpcd
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge net-misc/dhcpcd'
+- name: enable dhcpcd service
+	ansible.builtin.service:
+		name: dhcpcd
+		state: started
+		enabled: yes
+- name: emerge networkmanager
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge net-misc/networkmanager'
+- name: enable netowrkmanager service
+	ansible.builtin.service:
+		name: NetworkManager
+		state: started
+		enabled: yes
+- name: emerge packages for wireless
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge net-wireless/iw net-wireless/wpa_supplicant'
+- name: prepare systemd id setup
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; systemd-machine-id-setup && systemd-firstboot --prompt && systemctl preset-all --preset-mode=enable-only'
+
+	

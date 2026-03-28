@@ -1,0 +1,7 @@
+[Unit]
+Description=Wall-auto
+[Service]
+Type=exec
+ExecStart=/home/sdobrau/bin/wall-auto.sh
+[Install]
+WantedBy=multi-user.target

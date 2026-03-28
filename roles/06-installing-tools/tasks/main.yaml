@@ -1,0 +1,13 @@
+---
+- name: emerge cronie
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge sys-process/cronie'
+- name: emerge mlocate
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge sys-apps/mlocate'
+- name: emerge bash completion
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge app-shells/bash-completion'
+- name: enable chronyd service
+	ansible.builtin.service:
+		name: chronyd
+		state: started
+		enabled: yes
+	

@@ -1,0 +1,37 @@
+---
+- name: install linux-firmware
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge sys-kernel/linux-firmware'
+  
+- name: set USE flag grub for sys-kernel/installkernel
+	ansible.builtin.copy:
+		src: files/for-build/installkernel-use
+		dest: /mnt/gentoo/etc/portage/package.use/installkernel
+    
+- name: install installkernel
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge sys-kernel/installkernel'
+
+# configuring signed kernel modules
+- name: generate key and certificate for signed kernel modules
+  ansible.builtin.command:
+    # using -batch for scripted
+    cmd: 'cd /mnt/gentoo/chroot/root/; openssl req -new -noenc -utf8 -sha256 -x509 -outform PEM -out kernel_key.pem -keyout kernel_key.pem; chown root:root kernel_key.pem; chmod 400 kernel_key.pem -batch'
+    creates: /mnt/gentoo/root/kernel_key.pem
+    
+- name: ensure correct permissions for signed kernel module key
+  ansible.builtin.file:
+    path: /mnt/gentoo/chroot/root/kernel_key.pem
+    owner: root
+    group: root
+    mode: 0400
+    
+- name: get UUID of root partition
+	ansible.builtin.command: blkid | grep p3 | awk -F"\"" '{print $2}'
+	register: root_uuid
+  
+- name: configure dracut with the root partition
+		ansible.builtin.template:
+    src: templates/dracut-config.j2
+		dest: /mnt/gentoo/etc/dracut.conf.d/00-installkernel.conf
+- name: install a distribution kernel
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge sys-kernel/gentoo-kernel-bin'
+	

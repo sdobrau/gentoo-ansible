@@ -1,0 +1,7 @@
+[Unit]
+Description=Hyprpaper
+[Service]
+Type=exec
+ExecStart=/usr/bin/hyprpaper
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+[Unit]
+Description=Waybar
+[Service]
+Type=exec
+ExecStart=/usr/bin/waybar
+[Install]
+WantedBy=multi-user.target

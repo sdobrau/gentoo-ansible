@@ -1,0 +1,7 @@
+[Unit]
+Description=Polkit authentication service
+[Service]
+Type=exec
+ExecStart=/usr/libexec/polkit-gnome-authentication-agent-1
+[Install]
+WantedBy=multi-user.target

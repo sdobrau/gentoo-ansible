@@ -1,0 +1,7 @@
+[Unit]
+Description=Hypridle
+[Service]
+Type=exec
+ExecStart=/usr/bin/hypridle
+[Install]
+WantedBy=multi-user.target

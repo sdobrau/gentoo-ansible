@@ -1,0 +1,13 @@
+---
+- name: Install gentoo
+	hosts: localhost
+	roles:
+		- role: 01-preparing-the-disks
+		- role: 02-the-stage-file
+		- role: 03-installing-base-system
+		- role: 04-configuring-the-kernel
+		- role: 05-configuring-the-system
+	  - role: 06-installing-tools
+	  - role: 07-configuring-the-bootloader
+		- role: 08-finalizing
+	  - role: 09-post-install

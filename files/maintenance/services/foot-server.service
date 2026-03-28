@@ -1,0 +1,7 @@
+[Unit]
+Description=Foot server
+[Service]
+Type=exec
+ExecStart=/usr/bin/foot -s
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+---
+- name: place world file
+	ansible.builtin.copy:
+		src: files/maintenance/gentoo-world-file
+		dest: /mnt/gentoo/var/lib/world
+- name: place portage folder (use flags, make.conf, etc)
+	ansible.builtin.copy:
+		src: files/maintenance/portage-folder
+		dest: /mnt/gentoo/etc/portage
+- name: update @world without chromium
+	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --update --deep --newuse @world --exclude www-client/chromium'
+		

@@ -1,0 +1,127 @@
+---
+- name: ensure portage files
+	ansible.builtin.file:
+		src: files/portage
+
+# configurations
+- name: ensure hypr configuration
+  ansible.builtin.file:
+		src: files/maintenance/services/hypr
+		dest: /home/sdobrau/.config/hypr
+		owner: sdobrau
+		mode: 0755
+- name: ensure mpd configuration
+	ansible.builtin.file:
+		src: files/maintenance/services/mpd
+		dest: /home/sdobrau/.config/mpd/
+		owner: sdobrau
+		mode: 0755
+- name: ensure ncmpcpp configuration
+	ansible.builtin.file:
+		src: files/maintenance/services/ncmpcpp
+		dest: /home/sdobrau/.config/ncmpcpp
+		owner: sdobrau
+		mode: 0755
+- name: ensure waybar configuration
+	ansible.builtin.file:
+		src: files/maintenance/services/waybar
+		dest: /home/sdobrau/.config/waybar
+		owner: sdobrau
+		mode: 0755
+
+## emacs configuration
+- name: clone emacs conf to .emacs.d
+  ansible.builtin.git:
+    repo: 'https://github.com/sdobrau/.emacs.d.git'
+    dest: ~/.emacs.d/
+
+# main services ensure on
+- name: ensure bluetooth service started and enabled
+  ansible.builtin.service:
+    name: bluetooth
+    state: started
+    enabled: yes
+- name: ensure mpd service started and enabled
+  ansible.builtin.service:
+    name: mpd
+    state: started
+    enabled: yes
+    
+# custom services files
+- name: ensure foot server service file
+	ansible.builtin.file:
+	  src: files/maintenance/services/foot-server.service
+		dest: /home/sdobrau/.config/systemd/user/hypridle.service
+    
+- name: ensure hypridle service file
+	ansible.builtin.file:
+	  src: files/maintenance/services/hypridle.service
+		dest: /home/sdobrau/.config/systemd/user/hypridle.service
+    
+- name: ensure hyprpaper service file
+	ansible.builtin.file:
+	  src: files/maintenance/services/hyprpaper.service
+		dest: /home/sdobrau/.config/systemd/user/hypridle.service
+    
+- name: ensure polkit service file
+	ansible.builtin.file:
+	  src: files/maintenance/services/polkit.service
+		dest: /home/sdobrau/.config/systemd/user/hypridle.service
+    
+- name: ensure wall-auto service file
+	ansible.builtin.file:
+	  src: files/maintenance/services/wall-auto.service
+		dest: /home/sdobrau/.config/systemd/user/hypridle.service
+    
+- name: ensure waybar service file
+	ansible.builtin.file:
+	  src: files/maintenance/services/waybar.service
+		dest: /home/sdobrau/.config/systemd/user/hypridle.service
+- name: ensure wl-paste service file
+	ansible.builtin.file:
+	  src: files/maintenance/services/wl-paste.service
+		dest: /home/sdobrau/.config/systemd/user/wl-paste.service
+
+# custom services 
+    
+- name: ensure foot-server service started and enabled
+  ansible.builtin.systemd_service:
+    name: foot-server
+    scope: user
+    state: started
+    enabled: yes
+    
+- name: ensure hypridle service started and enabled
+  ansible.builtin.systemd_service:
+    name: hypridle
+    scope: user
+    state: started
+    enabled: yes
+
+- name: ensure hyprpaper service started and enabled
+  ansible.builtin.systemd_service:
+    name: hyprpaper
+    scope: user
+    state: started
+    enabled: yes
+
+- name: ensure polkit service started and enabled
+  ansible.builtin.systemd_service:
+    name: polkit
+    scope: user
+    state: started
+    enabled: yes
+
+- name: ensure wall-auto service started and enabled
+  ansible.builtin.systemd_service:
+    name: wall-auto
+    scope: user
+    state: started
+    enabled: yes
+
+- name: ensure wl-paste service started and enabled
+  ansible.builtin.systemd_service:
+    name: wl-paste
+    scope: user
+    state: started
+    enabled: yes
