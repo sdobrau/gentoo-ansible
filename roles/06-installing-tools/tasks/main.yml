@@ -1,0 +1,6 @@
+---
+
+- name: emerge mlocate  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet sys-apps/mlocate'
+- name: emerge bash completion  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet app-shells/bash-completion'

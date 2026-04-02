@@ -1,0 +1,50 @@
+---
+
+- name: get UUID of root vda partition # TODO
+  ansible.builtin.shell: >
+    blkid | grep vda3 | awk -F"\"" '{print $2}'
+  register: root_uuid
+  # when: is_nvme.rc != 0
+
+- name: ensure dracut.conf.d directory  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/etc/dracut.conf.d/
+    state: directory
+
+- name: configure dracut with the root partition
+  ansible.builtin.template:
+    src: templates/dracut-config.j2
+    dest: /mnt/gentoo/etc/dracut.conf.d/00-installkernel.conf
+
+# configuring signed kernel modules
+- name: generate key and certificate for signed kernel modules  # OK
+  ansible.builtin.command:
+    cmd: chroot /mnt/gentoo bash -c 'source /etc/profile; cd /root/; openssl req -new -noenc -utf8 -sha256 -x509 -outform PEM -out kernel_key.pem -keyout kernel_key.pem -batch'
+    creates: "/mnt/gentoo/root/kernel_key.pem"
+
+- name: ensure correct permissions for signed kernel module key  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/root/kernel_key.pem
+    owner: root
+    group: root
+    mode: 0400
+
+- name: set USE flag grub and dracut for sys-kernel/installkernel  # OK
+  ansible.builtin.copy:
+    src: files/for-build/installkernel-use
+    dest: /mnt/gentoo/etc/portage/package.use/installkernel
+
+- name: install linux-firmware  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet sys-kernel/linux-firmware --quiet'
+
+- name: install installkernel  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet sys-kernel/installkernel'
+
+# - name: get UUID of root nvme partition # TODO
+#   ansible.builtin.shell: >
+#     blkid | grep n1p3 | awk -F"\"" '{print $2}'
+#   register: root_uuid
+#   when: is_nvme.rc == 0
+
+- name: install a distribution kernel (binary) # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet sys-kernel/gentoo-kernel-bin'

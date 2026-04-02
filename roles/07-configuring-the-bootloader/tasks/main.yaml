@@ -1,7 +1,0 @@
----
-- name: emerge grub
-	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge sys-boot/grub'
-- name: install grub
-	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; grub-install --target=x86_64-efi --efi-directory=/efi'
-- name: generate grub config
-	ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; grub-mkconfig -o /boot/grub/grub.cfg'

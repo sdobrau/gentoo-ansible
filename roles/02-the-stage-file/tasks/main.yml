@@ -1,0 +1,73 @@
+---
+
+- name: sync the clock using chronyd  # OK
+  ansible.builtin.command: chronyd -q
+
+- name: import release keys to check the files against  # OK
+  ansible.builtin.command: gpg --quiet --import /usr/share/openpgp-keys/gentoo-release.asc
+  register: gpg_keys_imported
+
+  # Fetch the desktop file
+
+- name: fetch desktop-systemd file latest  # OK
+  ansible.builtin.shell: >
+    curl -s https://gentoo.osuosl.org/releases/amd64/autobuilds/current-stage3-amd64-desktop-systemd/latest-stage3-amd64-desktop-systemd.txt | sed -n -e '6p' | awk '{print $1}'
+  register: stage_file_path
+
+- name: fetch stage file  # OK
+  ansible.builtin.shell: >
+    curl -s https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-desktop-systemd/{{ stage_file_path.stdout }} --output {{ stage_file_path.stdout }}
+  register: stage_fetched
+
+- name: fetch stage asc file  # OK
+  ansible.builtin.shell: >
+    curl -s https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-desktop-systemd/{{ stage_file_path.stdout }}.asc --output {{ stage_file_path.stdout }}.asc
+
+- name: fetch stage digests file  # OK
+  ansible.builtin.shell: >
+    curl -s https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-desktop-systemd/{{ stage_file_path.stdout }}.DIGESTS --output {{ stage_file_path.stdout }}.DIGESTS
+
+- name: fetch stage sha256 file  # OK
+  ansible.builtin.shell: >
+    curl -s https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-desktop-systemd/{{ stage_file_path.stdout }}.sha256 --output {{ stage_file_path.stdout }}.sha256
+
+- name: verify stage asc  # OK
+  ansible.builtin.shell: >
+    gpg --yes --batch --quiet --verify {{ stage_file_path.stdout }}.asc {{ stage_file_path.stdout }}
+
+- name: verify stage digests  # OK
+  ansible.builtin.shell: >
+    gpg --yes --batch --quiet --output {{ stage_file_path.stdout }}.DIGESTS.verified --verify {{ stage_file_path.stdout }}.DIGESTS
+- name: verify stage sha256  # OK
+  ansible.builtin.shell: >
+    gpg --yes --batch --quiet --output {{ stage_file_path.stdout }}.sha256.verified --verify {{ stage_file_path.stdout }}.sha256
+- name: extract stage tarball inside /mnt/gentoo  # OK
+  ansible.builtin.command: "tar xpf {{ stage_file_path.stdout }} --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo"
+  register: tarball_extracted
+  when:
+    # TODO: gid vs changed
+    - stage_fetched is defined
+    # stupid dependency logic
+    - root_mounted is defined
+
+ # we are doing it without ansible_facts as nproc is most accurate
+- name: get number of processors (threads) (cores times threads)  # OK
+  ansible.builtin.command:
+    cmd: nproc
+  register: cpunr
+
+- name: set nr_of_cpus to cpunr.stdout  # OK
+  set_fact:
+    nr_of_cpus: "{{ cpunr.stdout }}"
+
+- name: ensure portage directory exists  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/etc/portage
+    state: directory
+  register: portage_directory_made
+
+- name: dynamically configure make.conf  # OK
+  ansible.builtin.template:
+    src: templates/make.conf.j2
+    dest: /mnt/gentoo/etc/portage/make.conf
+  when: portage_directory_made is defined

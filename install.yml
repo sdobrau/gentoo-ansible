@@ -1,0 +1,23 @@
+---
+- name: Install gentoo
+  # hosts: 192.168.122.69
+  hosts: default
+  vars_prompt:
+    - name: mirror_country
+      prompt: what country for mirrors?
+      default: "United Kingdom"
+      private: false
+    - name: timezone
+      prompt: what timezone?
+      default: "Europe/London"
+      private: false
+  roles:
+    - role: 01-preparing-the-disks  # OK?
+    - role: 02-the-stage-file  # OK
+    # - role: 03-installing-base-system  # OK
+    # - role: 04-configuring-the-kernel  # OK
+    # - role: 05-configuring-the-system  # OK
+    # - role: 06-installing-tools  # OK
+    # - role: 07-configuring-the-bootloader  # OK
+    # - role: 08-finalizing  # OK
+    # - role: 09-world-maintenance  # OK

@@ -1,0 +1,27 @@
+# package.accept_keywords# required by gui-wm/hyprland-9999::gentoo
+# required by gui-wm/hyprland (argument)
+=gui-libs/hyprcursor-9999 **
+# required by gui-wm/hyprland-9999::gentoo
+# required by gui-wm/hyprland (argument)
+=dev-libs/hyprland-protocols-9999 **
+# required by gui-wm/hyprland (argument)
+=gui-wm/hyprland-9999 **
+# required by gui-wm/hyprland-9999::gentoo
+# required by gui-wm/hyprland (argument)
+=gui-libs/aquamarine-9999 **
+# required by gui-wm/hyprland-0.51.1::gentoo
+# required by =gui-wm/hyprland-0.51.1 (argument)
+=dev-libs/hyprgraphics-0.1.5 ~amd64
+# required by =gui-wm/hyprland-0.51.1 (argument)
+=gui-wm/hyprland-0.51.1 ~amd64
+# required by media-fonts/victor-mono (argument)
+=media-fonts/victor-mono-1.5.6 ~amd64
+# required by gui-apps/hyprlock-0.9.2-r1::hyproverlay
+# required by hyprlock (argument)
+=dev-cpp/sdbus-c++-2.1.0 ~amd64
+# required by brightnessctl (argument)
+=app-misc/brightnessctl-0.5.1 ~amd64
+# required by app-editors/emacs-lsp-booster (argument)
+=app-editors/emacs-lsp-booster-0.2.1 ~amd64
+# required by yaml-language-server (argument)
+=dev-util/yaml-language-server-1.15.0 ~amd64

@@ -1,7 +1,10 @@
 [Unit]
 Description=Hyprpaper
+Requires=hyprland.service
+After=hyprland.service
 [Service]
 Type=exec
 ExecStart=/usr/bin/hyprpaper
+ExecStartPre=/bin/sleep 1
 [Install]
 WantedBy=multi-user.target

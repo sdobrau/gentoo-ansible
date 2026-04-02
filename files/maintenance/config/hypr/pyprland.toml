@@ -1,0 +1,13 @@
+[pyprland]
+plugins = ["fetch_client_menu", "layout_center"]
+
+[layout_center]
+margin = 60
+offset = [60, 60]
+next = "movefocus r"
+prev = "movefocus l"
+next2 = "movefocus d"
+prev2 = "movefocus u"
+
+[fetch_client_menu]
+separator = "|"

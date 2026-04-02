@@ -1,0 +1,109 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 8,
+    "spacing": 3,
+
+    "modules-left": ["hyprland/workspaces", "group/usage"],
+    "modules-center": ["clock"],
+    "modules-right": ["mpd", "custom/nmcli"],
+
+    "group/usage": {
+        "orientation": "horizontal",
+        "modules": ["memory", "temperature", "cpu", "disk"]
+    },
+
+    "hyprland/workspaces": {
+        "sort-by-number": true,
+        "persistent-workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+        }
+    },
+
+    "clock": {
+        "format": "{:%d.%m.%Y %a | %H:%M}"
+    },
+
+    "wireplumber": {
+        "format": "{volume}%",
+        "max-volume": 100,
+        "scroll-step": 5
+    },
+
+    "mpd": {
+        "format": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {title} ({album}) ",
+        "format-disconnected": "Disconnected " ,
+        "format-stopped":
+        "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped " ,
+        "interval": 5,
+        // "consume-icons": {
+        //     "on": " " // Icon shows only when "consume" is on
+        // },
+        // "random-icons": {
+        //     "on": " "
+        // },
+        // "repeat-icons": {
+        //     "on": " "
+        // },
+        // "single-icons": {
+        //     "on": "1 "
+        // },
+        // "state-icons": {
+        //     "paused": " ",
+        //     "playing": " "
+        // }
+        "tooltip-format": "MPD (connected) ",
+        "tooltip-format-disconnected": "MPD (disconnected) "
+    },
+    "custom/nmcli": {
+        "format": "Network: {} ",
+        //"max-length": 15,
+        "interval": 2,
+        "exec": "nmcli n connectivity",
+    },
+    "custom/muted": {
+        "format": "{}",
+        //"max-length": 15,
+        "interval": 1,
+        "exec": "pactl get-sink-mute alsa_output.pci-0000_07_00.6.pro-output-0 ",
+    },
+    "network": {
+              "interface": "wlp7s0f3u1",
+              "format": "{ifname}",
+              "format-wifi": "{essid} ({signalStrength}%) ",
+              "format-ethernet": "{ifname} ",
+              "format-disconnected": "", //An empty format will hide the module.
+              "format-disconnected": "",
+              "tooltip-format": "{ifname}",
+              "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+              "tooltip-format-ethernet": "{ifname} ",
+              "tooltip-format-disconnected": "Disconnected",
+              "max-length": 50
+    },
+
+    "memory": {
+        "interval": 30,
+        "format": "\uf4bc  {used:0.1f}G/{total:0.1f}G"
+    },
+
+    "cpu": {
+        "interval": 5,
+        "format": "   {usage}% |",
+        "max-length": 12
+    },
+
+    "disk": {
+        "interval": 60,
+        "format": "{percentage_free}% in {path}",
+        "path": "/home/"
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 16
+    }
+}

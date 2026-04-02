@@ -1,0 +1,37 @@
+---
+
+- name: place a properly formatted fstab (vda)  # OK
+  ansible.builtin.copy:
+    src: files/for-build/fstab-vda
+    dest: /mnt/gentoo/etc/fstab
+  # when: is_nvme.rc != 0
+
+# - name: place a properly formatted fstab (nvme) # OK
+#   ansible.builtin.copy:
+#     src: files/for-build/fstab-nvme
+#     dest: /mnt/gentoo/etc/fstab
+#   # when: is_nvme.rc == 0
+
+- name: emerge dhcpcd  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-misc/dhcpcd'
+
+- name: ensure dhcpcd service is started and enabled # OK
+  ansible.builtin.service:
+    name: dhcpcd
+    state: started
+    enabled: true
+
+- name: emerge NetworkManager  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-misc/networkmanager'
+
+- name: ensure NetworkManager service started and enabled  # OK
+  ansible.builtin.service:
+    name: NetworkManager
+    state: started
+    enabled: true
+
+- name: emerge packages for wireless functionality # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-wireless/iw net-wireless/wpa_supplicant'
+
+- name: prepare systemd id setup  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; systemd-machine-id-setup && systemd-firstboot && systemctl preset-all --preset-mode=enable-only'

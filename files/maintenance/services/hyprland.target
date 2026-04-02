@@ -1,0 +1,4 @@
+[Unit]
+Description=Hyprland target
+Requires=foot-server.service hypridle.service hyprpaper.service polkit.service wall-auto.service waybar.service wl-paste.service
+After=hyprland.service

@@ -1,0 +1,140 @@
+---
+
+- name: calculate whether virt or nvme  # OK
+  ansible.builtin.command: "lsblk | grep nvme"
+  register: is_nvme
+  ignore_errors: yes
+
+- name: Setup partitions for gentoo vda style  # OK
+  when: is_nvme.rc != 0
+  block:
+
+    - name: notify that this is a virt machine  # OK
+      ansible.builtin.debug:
+        msg: "is_nvme is {{ is_nvme.rc }} (non-zero). So this is not NVMe so it is then a virtual machine."
+
+    - name: create msdos label  # OK
+      ansible.builtin.command: "parted -s /dev/vda mklabel msdos"
+
+    - name: create boot partition  # OK
+      ansible.builtin.command: "parted -s /dev/vda mkpart primary fat32 2048s 1GiB"
+      # creates: /dev/vda1
+      register: boot_created
+
+    - name: format boot partition  # OK
+      # use command instead of module to be sure
+      ansible.builtin.command: "mkfs.vfat -F32 /dev/vda1"
+      register: boot_formatted
+
+    # TODO / NOTE cannot set type to efi
+    - name: create swap partition  # OK
+      community.general.parted:
+        device: /dev/vda
+        number: 2
+        part_start: 1GiB
+        part_end: 5GiB
+        state: present
+      register: swap_created
+
+    - name: make swap  # OK
+      ansible.builtin.command: "mkswap /dev/vda2"
+      when: swap_created.changed
+      register: swap_made
+
+    - name: enable swap  # OK
+      ansible.builtin.command: "swapon /dev/vda2"
+      when: swap_made.changed
+
+    - name: create root partition  # OK
+      community.general.parted:
+        device: /dev/vda
+        number: 3
+        fs_type: ext4
+        part_start: 5GiB
+        part_end: 55GiB
+        state: present
+      register: root_created
+
+    - name: format root partition  # OK
+      community.general.filesystem:
+        fstype: ext4
+        device: /dev/vda3
+      when: root_created is defined
+      register: root_formatted
+
+    - name: create /mnt/gentoo path  # OK
+      ansible.builtin.file:
+        path: /mnt/gentoo
+        owner: root
+        group: root
+        mode: 0777
+        state: directory
+      when: root_formatted is defined
+      register: gentoo_path_made
+
+    - name: mount root partition in /mnt/gentoo  # OK
+      ansible.posix.mount:
+        src: /dev/vda3
+        path: /mnt/gentoo
+        fstype: ext4
+        state: mounted
+      when: gentoo_path_made is defined
+      register: root_mounted
+
+  # TODO: test on live sys and add register+whens
+- name: Setup partitions for gentoo nvme style
+  when: is_nvme.rc == 0
+  block:
+
+    - name: notify that this is a live machine
+      ansible.builtin.debug:
+        msg: "is_nvme is {{ is_nvme.rc }} (zero). So this is NVMe so it is then a live machine."
+
+    - name: testing
+      ansible.builtin.command: "parted /dev/nvme0n1 mkpart primary fat32 1 1GiB"
+    - name: format boot partition
+      # use command instead of module to be sure
+      ansible.builtin.command: "mkfs.vfat -F32 /dev/vda1"
+      register: boot_formatted
+
+    - name: create swap partition
+      community.general.parted:
+        device: /dev/nvme0n1p2
+        number: 2
+        part_start: 1GiB
+        part_end: 33GiB
+        state: present
+
+    # TODO: make label part
+    - name: make swap
+      ansible.builtin.command: "mkswap --quiet /dev/nvme0n1p2"
+
+    - name: enable swap
+      ansible.builtin.command: "swapon /dev/nvme0n1p2"
+
+    - name: create root partition
+      community.general.parted:
+        device: /dev/nvme0n1p3
+        number: 3
+        fs_type: ext4
+        part_end: 2.5TiB
+        state: present
+
+    - name: format root partition
+      community.general.filesystem:
+        fstype: ext4
+        device: /dev/nvme0n1p3
+
+    - name: create /mnt/gentoo path
+      ansible.builtin.file:
+        path: /mnt/gentoo
+        owner: root
+        group: root
+        mode: 0777
+        state: directory
+
+    - name: mount root partition in /mnt/gentoo
+      ansible.posix.mount:
+        src: /dev/nvme0n1p3
+        path: /mnt/gentoo
+        state: mounted

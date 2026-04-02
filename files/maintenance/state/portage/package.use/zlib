@@ -1,0 +1,5 @@
+# for chromium
+sys-libs/zlib minizip
+# required by @selected
+# required by @world (argument)
+>=app-editors/emacs-31.0.9999 -jpeg

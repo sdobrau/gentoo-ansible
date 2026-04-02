@@ -1,0 +1,21 @@
+post_pkg_postinst() {
+# Eselect the new kernel or genkernel will build the current one
+	eselect kernel set linux-"${KV}"
+		CURRENT_KV=$(uname -r)
+	# Check if genkernel has been run previously for the running kernel and use that config
+		if [[ -f "${EROOT}/etc/kernels/kernel-config-${CURRENT_KV}" ]] ; then
+			genkernel --no-module-rebuild --kernel-config="${EROOT}/etc/kernels/kernel-config-${CURRENT_KV}" all
+	# Use latest kernel config from current kernel
+		elif [[ -f "${EROOT}/usr/src/linux-${CURRENT_KV}/.config" ]] ; then
+			genkernel --no-module-rebuild --kernel-config="${EROOT}/usr/src/linux-${CURRENT_KV}/.config" all
+	# Use known running good kernel
+		elif [[ -f /proc/config.gz ]] ; then
+			zcat /proc/config.gz >> "${EROOT}/tmp/genkernel.config"
+			genkernel --no-module-rebuild --kernel-config="${EROOT}/tmp/genkernel.config" all
+			rm "${EROOT}/tmp/genkernel.config"
+	# No valid configs known, compile a clean one
+		else
+			genkernel --no-module-rebuild all
+		fi
+}
+	

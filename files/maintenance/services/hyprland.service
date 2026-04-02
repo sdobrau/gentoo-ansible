@@ -1,0 +1,7 @@
+[Unit]
+Description=Hyprland
+[Service]
+Type=exec
+ExecStart=/usr/bin/start-hyprland
+[Install]
+WantedBy=multi-user.target

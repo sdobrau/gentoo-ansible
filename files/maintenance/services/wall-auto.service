@@ -1,7 +1,10 @@
 [Unit]
 Description=Wall-auto
+Requires=hyprland.service
+After=hyprpaper.service
 [Service]
 Type=exec
 ExecStart=/home/sdobrau/bin/wall-auto.sh
+ExecStartPre=/bin/sleep 3
 [Install]
 WantedBy=multi-user.target

@@ -1,0 +1,168 @@
+---
+
+## temporary
+
+- name: calculate whether virt or nvme  # OK
+  ansible.builtin.command: "lsblk | grep nvme"
+  register: is_nvme
+  ignore_errors: yes
+
+##
+
+- name: copy over DNS info  # OK
+  ansible.builtin.copy:
+    src: /etc/resolv.conf
+    dest: /mnt/gentoo/etc/resolv.conf
+    remote_src: true
+  register: resolv_copied
+
+# preparing the mounts. ugh hacky/possibly not working dependency logic with gid=0
+- name: ensure /mnt/gentoo/ exists first  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/
+    state: directory
+  register: gentoo_path_made
+
+## proc
+
+- name: ensure /mnt/gentoo/proc exists first  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/proc
+    state: directory
+  when: gentoo_path_made.gid == 0
+  register: gentoo_proc_made
+
+- name: mount proc  # OK
+  ansible.builtin.command: mount --types proc /proc /mnt/gentoo/proc
+  when: gentoo_proc_made  is defined
+
+## sys
+
+- name: ensure /mnt/gentoo/sys exists first  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/sys
+    state: directory
+  when: gentoo_path_made.gid == 0
+  register: gentoo_sys_made
+- name: mount sys  # OK
+  ansible.builtin.command: mount --rbind /sys /mnt/gentoo/sys
+  when: gentoo_sys_made.gid == 0
+  register: sys_mounted
+- name: make sys rslave  # OK
+  ansible.builtin.command: mount --make-rslave /mnt/gentoo/sys
+  when: sys_mounted.rc == 0
+
+## dev
+
+- name: ensure /mnt/gentoo/dev exists first  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/dev
+    state: directory
+  when: gentoo_path_made.gid == 0
+  register: gentoo_dev_made
+- name: mount dev  # OK
+  ansible.builtin.command: mount --rbind /dev /mnt/gentoo/dev
+  register: dev_mounted
+  when: gentoo_dev_made.gid == 0
+- name: make dev rslave  # OK
+  ansible.builtin.command: mount --make-rslave /mnt/gentoo/dev
+  when: dev_mounted.rc == 0
+
+## run
+
+- name: ensure /mnt/gentoo/run exists first  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/run
+    state: directory
+  when: gentoo_path_made.gid == 0
+  register: gentoo_run_made
+- name: mount run  # OK
+  ansible.builtin.command: mount --bind /run /mnt/gentoo/run
+  when: gentoo_run_made.gid == 0
+  register: run_mounted
+- name: make run slave  # OK
+  ansible.builtin.command: mount --make-slave /mnt/gentoo/run
+  when: run_mounted.rc == 0
+
+## efi
+
+- name: ensure /efi exists  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/efi
+    state: directory
+  register: efi_made
+  when: gentoo_path_made.gid == 0
+
+- name: mount EFI in /mnt/gentoo/efi (vda)  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; mount /dev/vda1 /efi'
+  when:
+    - is_nvme.rc != 0
+    - efi_made is defined
+    - boot_formatted is defined
+    - tarball_extracted.rc == 0
+  register: efi_mounted
+
+- name: mount EFI in /efi (nvme)  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; mount /dev/nvme0n1p1 /efi'
+  when:
+    - is_nvme.rc == 0
+    - gentoo_path_made is defined
+  register: efi_mounted
+
+- name: sync ebuild repository  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge-webrsync --quiet'
+  register: emerge_webrsyncd
+  when: resolv_copied is defined
+
+- name: setup mirrorselect  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet --oneshot app-portage/mirrorselect --quiet'
+  # when: emerge_webrsyncd is defined
+
+- name: see if mirror not already conf in portage.conf
+  ansible.builtin.command: "grep --quiet GENTOO_MIRRORS /mnt/gentoo/etc/portage/make.conf"
+  register: gentoo_mirrors
+
+- name: generate mirror and output to portage.conf  # OK
+  # hacky
+  ansible.builtin.shell: >
+    mirrorselect -c "{{ mirror_country }}" && grep GENTOO_MIRRORS /etc/portage/make.conf >> /mnt/gentoo/etc/portage/make.conf
+  when: gentoo_mirrors.rc != 0 # when not found
+
+- name: copy rsync mirrors  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; mkdir /etc/portage/repos.conf && cp /usr/share/portage/config/repos.conf /etc/portage/repos.conf/gentoo.conf'
+
+- name: update the repository again  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet --sync'
+  when: emerge_webrsyncd is defined
+
+- name: set profile  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; eselect profile set 2'  # 23.0/system
+  when: emerge_webrsyncd is defined
+
+- name: generate cpuflags for all package's USE  # OK
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet --oneshot app-portage/cpuid2cpuflags && echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags'
+
+- name: setup timezone London  # OK
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; ln -sf /usr/share/zoneinfo/{{ timezone }} /etc/localtime'"
+
+- name: set locale  # OK
+  ansible.builtin.copy:
+    src: files/for-build/locale.gen
+    dest: /mnt/gentoo/etc/locale.gen
+  register: locale_gen_modified
+
+- name: generate and select locale
+  # en_US.UTF-8
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile/; locale-gen && eselect locale set 3'
+  when: locale_gen_modified is defined
+  register: locale_generated
+
+- name: create dir for kernel license  # OK
+  ansible.builtin.file:
+    path: /mnt/gentoo/etc/portage/package.license/
+    state: directory
+
+- name: license for linux firmware  # OK
+  ansible.builtin.copy:
+    src: files/for-build/kernel-package-license
+    dest: /mnt/gentoo/etc/portage/package.license/kernel

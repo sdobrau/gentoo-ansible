@@ -1,0 +1,113 @@
+# created by eselect-repo
+
+[guru]
+location = /var/db/repos/guru
+auto-sync = yes
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/guru.git
+
+[emacs]
+location = /var/db/repos/emacs
+auto-sync = yes
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/emacs.git
+
+[tatsh-overlay]
+location = /var/db/repos/tatsh-overlay
+auto-sync = yes
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/tatsh-overlay.git
+
+[example_repository]
+location = /var/db/repos/example_repository
+
+[zozx-overlay]
+location = /var/db/repos/zozx-overlay
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/zozx-overlay.git
+
+[brave-overlay]
+location = /var/db/repos/brave-overlay
+sync-type = git
+sync-uri = https://gitlab.com/jason.oliveira/brave-overlay.git
+
+[nest]
+location = /var/db/repos/nest
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/nest.git
+
+[thegreatmcpain]
+location = /var/db/repos/thegreatmcpain
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/thegreatmcpain.git
+
+# [9999]
+# location = /var/db/repos/9999
+# sync-type = git
+# auto-sync = yes
+# sync-uri = https://github.com/gentoo-mirror/9999.git
+
+[pf4public]
+location = /var/db/repos/pf4public
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/pf4public.git
+
+[chymeric]
+location = /var/db/repos/chymeric
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/chymeric.git
+
+[parona-overlay]
+location = /var/db/repos/parona-overlay
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/parona-overlay.git
+
+[mv]
+location = /var/db/repos/mv
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/mv.git
+
+[wayland-desktop]
+location = /var/db/repos/wayland-desktop
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/wayland-desktop.git
+
+[pentoo]
+location = /var/db/repos/pentoo
+sync-type = git
+sync-uri = https://github.com/pentoo/pentoo-overlay.git
+
+[ace]
+location = /var/db/repos/ace
+sync-type = git
+sync-uri = https://github.com/ananace/overlay.git
+
+[edgets]
+location = /var/db/repos/edgets
+sync-type = git
+sync-uri = https://github.com/BlueManCZ/edgets.git
+
+[natinst]
+location = /var/db/repos/natinst
+sync-type = git
+sync-uri = https://github.com/Nowa-Ammerlaan/natinst.git
+
+[robertgzr]
+location = /var/db/repos/robertgzr
+sync-type = git
+sync-uri = https://git.sr.ht/~robertgzr/portage
+
+[menelkir]
+location = /var/db/repos/menelkir
+sync-type = git
+sync-uri = https://gitlab.com/menelkir/gentoo-overlay.git
+
+[JRG]
+location = /var/db/repos/JRG
+sync-type = git
+sync-uri = https://github.com/john-r-graham/jrg-overlay.git
+
+[ap-overlay]
+location = /var/db/repos/ap-overlay
+sync-type = git
+sync-uri = https://gitlab.com/AbhinavPraveen/ap-overlay.git

@@ -1,7 +1,10 @@
 [Unit]
 Description=Foot server
+Requires=hyprland.service
+After=hyprland.service
 [Service]
 Type=exec
 ExecStart=/usr/bin/foot -s
+ExecStartPre=/bin/sleep 1
 [Install]
 WantedBy=multi-user.target

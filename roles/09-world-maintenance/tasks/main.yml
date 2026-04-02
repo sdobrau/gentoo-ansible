@@ -1,0 +1,101 @@
+---
+- name: ensure portage files
+  ansible.builtin.copy:
+    src: files/maintenance/state/portage/ # / > copy whole
+    dest: /mnt/gentoo/etc/portage/
+    owner: root
+    group: root
+  ignore_errors: true
+
+- name: ensure world
+  ansible.builtin.copy:
+    src: files/maintenance/state/gentoo-world-file
+    dest: /mnt/gentoo/var/lib/portage/world
+    owner: root
+    group: portage
+
+- name: update @world without chromium (idempotent)
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet --update --deep --newuse @world --exclude www-client/chromium --exclude www-client/chromium:stable'
+
+# etc configurations
+- name: ensure libvirtd configuration (allow libvirt group)
+  ansible.builtin.file:
+    src: files/maintenance/config/libvirtd.conf
+    dest: /mnt/gentoo/etc/libvirt/libvirtd.conf
+
+- name: sync hyprshade install
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; hyprshade install'"
+
+- name: enable user hyprshade timer
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; systemctl --user enable --now hyprshade.timer'"
+
+- name: "ensure {{ item }} configuration"
+  ansible.builtin.file:
+    src: "files/maintenance/config/{{ item }}"
+    dest: "/mnt/gentoo/home/sdobrau/.config/{{ item }}"
+    owner: sdobrau
+    mode: 0755
+  with_items:
+    - mpv
+    - tofi
+    - waybar
+    - .gitconfig
+    - hypr
+
+## emacs configuration
+- name: clone emacs conf to .emacs.d
+  ansible.builtin.git:
+    repo: 'https://github.com/sdobrau/.emacs.d.git'
+    dest: /mnt/gentoo/home/sdobrau/.emacs.d.cloned/
+
+- name: place crontab
+  ansible.builtin.file:
+    src: files/maintenance/state/crontab
+    dest: /mnt/gentoo/etc/crontab
+    owner: root
+    group: root
+    mode: 0644
+
+# services
+- name: "ensure {{ item }} service started and enabled"
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; systemctl enable --now {{ item }}'"
+  with_items:
+    - cronie
+    - systemd-timesyncd
+    - bluetooth
+    - rsyslog
+    - pulseaudio.service
+    - pulseaudio.socket
+    # virt services
+    - libvirtd
+    - virtstoraged
+    - virtnetworkd
+    - virtlogd
+    - virtlockd
+    - fail2ban
+
+# custom services
+
+- name: "ensure {{ item }} service file placed"
+  ansible.builtin.file:
+    src: "files/maintenance/services/{{ item }}.service"
+    dest: "/mnt/gentoo/home/sdobrau/.config/systemd/user/{{ item }}.service"
+  with_items:
+    - foot-server
+    - hypridle
+    - hyprpaper
+    - polkit
+    - wall-auto
+    - waybar
+    - wl-paste
+
+- name: "ensure custom service {{ item }} started and enabled"
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; systemctl --user enable --now {{ item }}'"
+  with_items:
+    - foot-server
+    - hypridle
+    - hyprpaper
+    - polkit
+    - wall-auto
+    - waybar
+    - wl-paste
