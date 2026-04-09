@@ -1,11 +1,11 @@
 ---
 
   # we need this as we install packages later
-- name: ensure wheel, libvirt, audio and plugdev groups  # OK
+- name: ensure wheel, libvirt and audio groups  # OK
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet acct-group/wheel acct-group/libvirt acct-group/audio'
 
 - name: setup user  # OK
-  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; usermod -a -G users,wheel,libvirt,audio,plugdev -s /bin/bash sdobrau'
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; usermod -a -G users,docker,wheel,libvirt,audio,plugdev,kvm -s /bin/bash sdobrau'
 
 - name: remove stage3 files  # OK
   ansible.builtin.file:
