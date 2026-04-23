@@ -15,3 +15,42 @@
 - name: done # OK
   ansible.builtin.debug:
     msg: "Done configuring. now just ensuring world"
+
+- name: ensure packages for non-native packages
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-misc/curl net-misc/wget dev-python/pipx dev-lang/rust-bin dev-lang/go'
+
+# * rust packages
+- name: ensure cargo packages (cargo)
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; cargo install {{ item }}"
+  with_items:
+    - jnv
+
+- name: ensure go packages
+
+# * go packages
+
+- name: ensure go packages (golang)
+  ansible.bultin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; go install {{ item }}"
+  with_items:
+    - github.com/google/go-containerregistry/cmd/crane@latest
+    - github.com/lc/gau/v2/cmd/gau@latest
+
+# * python packages
+- name: ensure python packages (pipx)
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; pipx install {{ item }}"
+  with_items:
+    - awscli
+    - checkov
+
+# * standalone packages
+- name: ensure tflint
+  ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash"
+
+- name: ensure opa
+  ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; wget https://github.com/open-policy-agent/opa/releases/download/v1.15.2/opa_linux_amd64 -O ~/bin/opa"
+
+- name: ensure parallel
+  ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; cd /tmp; wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2 && wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2.sig && gpg parallel-20260322.tar.bz2.sig && bzip2 -dc parallel-20260322.tar.bz2 | tar xvf - && cd parallel-20260322 && ./configure && make && sudo make install && cd ../ && rm -rf parallel*"  
+
+- name: ensure Hyprland split-monitor-workspaces configured
+  ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; hyprpm -f add https://github.com/zjeffer/split-monitor-workspaces && hyprpm enable -f split-monitor-workspaces && hyprpm reload"

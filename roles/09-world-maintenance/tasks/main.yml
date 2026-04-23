@@ -42,6 +42,15 @@
     - .gitconfig
     - hypr
 
+# * home config
+
+- name: ensure bash profile
+  ansible.builtin.file:
+    src: files/maintenance/config/bash_profile
+    dest: /mnt/gentoo/home/sdobrau/.bash_profile
+    owner: sdobrau
+    mode: 0755
+
 ## emacs configuration
 - name: clone emacs conf to .emacs.d
   ansible.builtin.git:
@@ -76,7 +85,6 @@
     - fail2ban
 
 # custom services
-
 - name: "ensure {{ item }} service file placed"
   ansible.builtin.file:
     src: "files/maintenance/services/{{ item }}.service"
