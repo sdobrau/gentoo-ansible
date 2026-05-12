@@ -1,0 +1,11 @@
+[Unit]
+Description=Sync and index mail with mbsync and notmuch
+OnFailure=notify.service
+
+[Service]
+ExecStart=/usr/bin/notmuch new
+Restart=always
+RestartSec=300
+RuntimeMaxSec=300
+[Install]
+WantedBy=default.target

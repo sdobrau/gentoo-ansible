@@ -41,6 +41,16 @@
     - waybar
     - .gitconfig
     - hypr
+    - isyncrc #mbsync
+
+- name "ensure {{ item }} configuration in home root directory"
+  ansible.builtin.file:
+    src: "files/maintenance/config/home-root/{{ item }}"
+    dest: "/mnt/gentoo/home/sdobrau/{{ item }}"
+    owner: sdobrau
+    mode: 0755
+  with_items:
+    - .msmtprc
 
 # * home config
 
@@ -97,6 +107,10 @@
     - wall-auto
     - waybar
     - wl-paste
+    # for e-mail
+    - notify
+    - notmuch
+    - diary
 
 - name: "ensure custom service {{ item }} started and enabled"
   ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; systemctl --user enable --now {{ item }}'"

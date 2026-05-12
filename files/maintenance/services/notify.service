@@ -1,0 +1,9 @@
+[Unit]
+Description=Send Systemd Notifications to Desktop
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/notify-send -a "Systemd" %i
+
+[Install]
+WantedBy=default.target
