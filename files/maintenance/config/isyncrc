@@ -1,0 +1,27 @@
+IMAPStore serban.dobrau@gmail.com-remote
+Host imap.googlemail.com
+Port 993
+User serban.dobrau
+# contains an app password, see https://myaccount.google.com/apppasswords
+PassCmd "pass google-app-password"
+TLSType IMAPS
+# not needed, so turned of
+# AuthMechs XOAUTH2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+# Local mailbox falko.riemenschneider@gmail.com
+MaildirStore serban.dobrau@gmail.com-local
+Subfolders Verbatim
+Path ~/Mail/serban.dobrau@gmail.com/
+INBOX ~/Mail/serban.dobrau@gmail.com/INBOX
+Flatten .
+
+# Syncronization falko.riemenschneider@gmail.com
+Channel serban.dobrau@gmail.com
+Far :serban.dobrau@gmail.com-remote:
+Near :serban.dobrau@gmail.com-local:
+Patterns INBOX Drafts Sent Trash
+SyncState *
+Create Both
+Expunge Both
+MaxMessages 0

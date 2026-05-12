@@ -6,7 +6,7 @@
 
     "modules-left": ["hyprland/workspaces", "group/usage"],
     "modules-center": ["clock"],
-    "modules-right": ["mpd", "custom/nmcli"],
+    "modules-right": ["mpd", "custom/nmcli", "notmuch"],
 
     "group/usage": {
         "orientation": "horizontal",
@@ -64,6 +64,11 @@
         //"max-length": 15,
         "interval": 2,
         "exec": "nmcli n connectivity",
+    }
+    "notmuch": {
+        "format": "Mail: {} ",
+        "interval": 300,
+        "exec": "notmuch search --output=files --duplicate=1 tag:unread | wc -l",
     },
     "custom/muted": {
         "format": "{}",
