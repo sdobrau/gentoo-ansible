@@ -1,3 +1,49 @@
 [user]
 	email = serban.dobrau@gmail.com
 	name = Serban Dobrau
+
+[credential]
+	helper = libsecret
+
+[credential "smtp://serban.dobrau%40gmail.com@smtp.gmail.com%3a587"]
+    helper = !git-send-email-pass
+
+# https://gist.github.com/jasonkarns/4354421
+[sendemail]
+  confirm = always
+  compose            = yes
+  thread             = yes
+  assume8bitEncoding = UTF-8
+  annotate           = yes
+  smtpServer = smtp.gmail.com
+  smtpServerPort = 587
+  smtpEncryption = tls
+  smtpUser = serban.dobrau@gmail.com
+
+[format]
+  coverLetter  = auto
+  notes        = true
+  outputDirectory = patches
+  signOff      = no
+  useAutoBase  = true
+  numbered      = auto
+
+[am]
+  messageid = yes
+
+# [include]
+# path = .gitconfig-smtp
+
+[init]
+	defaultBranch = main
+[core]
+	pager = delta
+	# editor = emacs
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	dark = true
+[merge]
+	conflictStyle = zdiff3
+
