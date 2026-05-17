@@ -110,6 +110,8 @@
     # for e-mail
     - notify
     - notmuch
+    # emacs
+    - emacs-daemon
 
 - name: "ensure custom service {{ item }} started and enabled"
   ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; systemctl --user enable --now {{ item }}'"
@@ -124,3 +126,5 @@
     # for e-mail
     - notify
     - notmuch
+    # emacs
+    - emacs-daemon

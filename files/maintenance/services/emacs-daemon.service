@@ -1,0 +1,18 @@
+[Unit]
+Description=Emacs daemon
+Documentation=info:emacs man:emacs(1) https://www.gnu.org/software/emacs/
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/emacs --daemon
+ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+Restart=on-failure
+Environment=EMACS_SERVER_NAME=server
+# Optional: uncomment if you want a specific init dir
+# Environment=EMACSDIR=%h/.emacs.d
+
+[Install]
+WantedBy=default.target
+
+
