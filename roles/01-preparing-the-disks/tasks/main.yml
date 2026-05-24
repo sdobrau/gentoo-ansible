@@ -67,7 +67,7 @@
         path: /mnt/gentoo
         owner: root
         group: root
-        mode: 0777
+        mode: '0777'
         state: directory
       when: root_formatted is defined
       register: gentoo_path_made
@@ -130,7 +130,7 @@
         path: /mnt/gentoo
         owner: root
         group: root
-        mode: 0777
+        mode: '0777'
         state: directory
 
     - name: mount root partition in /mnt/gentoo

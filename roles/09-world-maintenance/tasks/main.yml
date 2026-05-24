@@ -34,7 +34,7 @@
     src: "files/maintenance/config/{{ item }}"
     dest: "/mnt/gentoo/home/sdobrau/.config/{{ item }}"
     owner: sdobrau
-    mode: 0755
+    mode: '0755'
   with_items:
     - mpv
     - tofi
@@ -48,7 +48,7 @@
     src: "files/maintenance/config/home-root/{{ item }}"
     dest: "/mnt/gentoo/home/sdobrau/{{ item }}"
     owner: sdobrau
-    mode: 0755
+    mode: '0755'
   with_items:
     - .msmtprc
 
@@ -59,7 +59,7 @@
     src: files/maintenance/config/bash_profile
     dest: /mnt/gentoo/home/sdobrau/.bash_profile
     owner: sdobrau
-    mode: 0755
+    mode: '0755'
 
 ## emacs configuration
 - name: clone emacs conf to .emacs.d
@@ -73,7 +73,7 @@
     dest: /mnt/gentoo/etc/crontab
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
 
 # services
 - name: "ensure {{ item }} service started and enabled"
