@@ -128,3 +128,17 @@
     - notmuch
     # emacs
     - emacs-daemon
+
+# * ssh config
+- name: ensure ssh directory exists
+  ansible.builtin.file:
+    path: /mnt/gentoo/home/sdobrau/.ssh
+    state: directory
+    mode: '0700'
+
+- name: ensure ssh controlmaster config
+  ansible.builtin.file:
+    src: "files/maintenance/config/home-root/ssh-config"
+    dest: "/mnt/gentoo/home/sdobrau/.ssh/config"
+    owner: sdobrau
+    mode: '0644'
