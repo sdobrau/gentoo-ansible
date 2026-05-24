@@ -70,3 +70,18 @@
 
 - name: ensure Hyprland split-monitor-workspaces configured
   ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; hyprpm -f add https://github.com/zjeffer/split-monitor-workspaces && hyprpm enable -f split-monitor-workspaces && hyprpm reload"
+# t * ollama
+- name: ensure package for ollama
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet app-misc/ollama'
+
+- name: installa ollama models
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet app-misc/ollama'
+  with_items:
+    - qwen2.5-coder:3b
+    - qwen2.5:3b
+    - qwen2.5-coder:3b-instruct-q8_0
+    - zephyr:7b-beta-q6_K
+    - mistral:7b-instruct-v0.2-q6_K
+    - mixtral:8x7b-instruct-v0.1-q3_K_M-4k
+    - llama3:8b-instruct-q8_0
+
