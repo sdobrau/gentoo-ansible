@@ -16,8 +16,21 @@
   ansible.builtin.debug:
     msg: "Done configuring. now just ensuring world"
 
+# t
+- name: ensure package.use directory exists
+  ansible.builtin.file:
+    path: /mnt/gentoo/etc/portage/package.use
+    state: directory
+    mode: '0755'
+
+- name: ensure package.use nodejs entry
+  ansible.builtin.copy:
+    dest: /mnt/gentoo/etc/portage/package.use/nodejs
+    content: "net-libs/nodejs npm"
+    mode: '0644'
+
 - name: ensure packages for non-native packages
-  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-misc/curl net-misc/wget dev-python/pipx dev-lang/rust-bin dev-lang/go'
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-misc/curl net-misc/wget dev-python/pipx dev-lang/rust-bin dev-lang/go net-libs/nodejs'
 
 # * rust packages
 - name: ensure cargo packages (cargo)
@@ -41,6 +54,9 @@
   with_items:
     - awscli
     - checkov
+# t * node packages
+- name: ensure jsfmt
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; npm install -g jsfmt"
 
 # * standalone packages
 - name: ensure tflint
