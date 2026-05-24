@@ -45,6 +45,7 @@ gui-apps/waybar
 gui-apps/wdisplays
 gui-apps/wmenu
 gui-wm/hyprland
+mail-mta/msmtp
 media-fonts/fonts-meta
 media-fonts/noto-cjk
 media-fonts/victor-mono
@@ -60,6 +61,7 @@ media-video/ffmpeg
 media-video/mpv
 net-p2p/nicotine+
 net-libs/nodejs
+net-mail/notmuch
 net-misc/openntpd
 sys-apps/systemd
 sys-apps/corepack
