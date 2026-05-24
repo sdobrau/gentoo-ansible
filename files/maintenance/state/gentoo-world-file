@@ -4,6 +4,8 @@ acct-group/plugdev
 acct-group/wheel
 acct-user/ollama
 acct-group/ollama
+acct-group/openntpd
+acct-user/openntpd
 app-accessibilty/whisper-cpp
 app-admin/ansible-lint
 app-admin/pass
@@ -58,6 +60,7 @@ media-video/ffmpeg
 media-video/mpv
 net-p2p/nicotine+
 net-libs/nodejs
+net-misc/openntpd
 sys-apps/systemd
 sys-apps/corepack
 sys-apps/lm-sensors
