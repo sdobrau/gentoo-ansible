@@ -1,6 +1,6 @@
 ---
 
-  # we need this as we install packages later
+# we need this as we install packages later
 - name: ensure wheel, libvirt and audio groups  # OK
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet acct-group/wheel acct-group/libvirt acct-group/audio'
 
@@ -38,22 +38,21 @@
   with_items:
     - jnv
 
-- name: ensure go packages
-
 # * go packages
-
 - name: ensure go packages (golang)
   ansible.bultin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; go install {{ item }}"
   with_items:
     - github.com/google/go-containerregistry/cmd/crane@latest
     - github.com/lc/gau/v2/cmd/gau@latest
 
-# * python packages
+# t * python packages
 - name: ensure python packages (pipx)
   ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; pipx install {{ item }}"
   with_items:
     - awscli
     - checkov
+    - zuban
+
 # t * node packages
 - name: ensure jsfmt
   ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; npm install -g jsfmt"

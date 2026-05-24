@@ -43,6 +43,7 @@
     - hypr
     - isyncrc #mbsync
 
+# t
 - name "ensure {{ item }} configuration in home root directory"
   ansible.builtin.file:
     src: "files/maintenance/config/home-root/{{ item }}"
@@ -61,7 +62,7 @@
     owner: sdobrau
     mode: '0755'
 
-## emacs configuration
+# * emacs configuration
 - name: clone emacs conf to .emacs.d
   ansible.builtin.git:
     repo: 'https://github.com/sdobrau/.emacs.d.git'
@@ -75,7 +76,7 @@
     group: root
     mode: '0644'
 
-# services
+# * services
 - name: "ensure {{ item }} service started and enabled"
   ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; systemctl enable --now {{ item }}'"
   with_items:
@@ -96,7 +97,7 @@
     - ollama
     - fail2ban
 
-# custom services
+# * custom services
 - name: "ensure {{ item }} service file placed"
   ansible.builtin.file:
     src: "files/maintenance/services/{{ item }}.service"
