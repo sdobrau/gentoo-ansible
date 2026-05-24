@@ -1,0 +1,1 @@
+echo 'password=$(pass show google-app-password)'

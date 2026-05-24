@@ -66,10 +66,11 @@
   ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; wget https://github.com/open-policy-agent/opa/releases/download/v1.15.2/opa_linux_amd64 -O ~/bin/opa"
 
 - name: ensure parallel
-  ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; cd /tmp; wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2 && wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2.sig && gpg parallel-20260322.tar.bz2.sig && bzip2 -dc parallel-20260322.tar.bz2 | tar xvf - && cd parallel-20260322 && ./configure && make && sudo make install && cd ../ && rm -rf parallel*"  
+  ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; cd /tmp; wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2 && wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2.sig && gpg parallel-20260322.tar.bz2.sig && bzip2 -dc parallel-20260322.tar.bz2 | tar xvf - && cd parallel-20260322 && ./configure && make && sudo make install && cd ../ && rm -rf parallel*"
 
 - name: ensure Hyprland split-monitor-workspaces configured
   ansible.builtin.command:  "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; hyprpm -f add https://github.com/zjeffer/split-monitor-workspaces && hyprpm enable -f split-monitor-workspaces && hyprpm reload"
+
 # t * ollama
 - name: ensure package for ollama
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet app-misc/ollama'
@@ -85,3 +86,21 @@
     - mixtral:8x7b-instruct-v0.1-q3_K_M-4k
     - llama3:8b-instruct-q8_0
 
+# t * local bin
+- name: ensure local bin exists
+  ansible.builtin.file:
+    path: "/mnt/gentoo/home/sdobrau/.local/bin"
+    state: directory
+
+- name: ensure symlink to ~/.local/bin in ~/bin
+  ansible.builtin.file:
+    src: "/mnt/gentoo/home/sdobrau/.local/bin"
+    dest: "/home/sdobrau/bin"
+    state: link
+
+# t * bin executables
+- name: ensure git-send-email-pass
+  ansible.builtin.file:
+    src: files/bins/git-send-email-pass
+    dest: /mnt/gentoo/home/sdobrau/bin/git-send-email-pass"
+    mode: '0755'
