@@ -51,9 +51,9 @@
     mode: '0755'
   with_items:
     - .msmtprc
+    - .gitconfig
 
 # * home config
-
 - name: ensure bash profile
   ansible.builtin.file:
     src: files/maintenance/config/bash_profile
