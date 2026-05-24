@@ -92,6 +92,8 @@
     - virtnetworkd
     - virtlogd
     - virtlockd
+    # other
+    - ollama
     - fail2ban
 
 # custom services
