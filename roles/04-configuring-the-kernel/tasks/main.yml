@@ -27,7 +27,7 @@
     path: /mnt/gentoo/root/kernel_key.pem
     owner: root
     group: root
-    mode: 0400
+    mode: '0400'
 
 - name: set USE flag grub and dracut for sys-kernel/installkernel  # OK
   ansible.builtin.copy:
