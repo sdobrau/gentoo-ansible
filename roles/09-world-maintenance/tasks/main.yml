@@ -95,6 +95,7 @@
     - virtlockd
     # other
     - fail2ban
+    - openntpd
 
 # * custom services
 - name: "ensure {{ item }} service file placed"
