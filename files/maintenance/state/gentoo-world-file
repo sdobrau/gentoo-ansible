@@ -63,6 +63,7 @@ media-sound/pulseaudio-daemon
 media-sound/strawberry
 media-video/ffmpeg
 media-video/mpv
+net-im/discordo
 net-libs/nodejs
 net-mail/notmuch
 net-misc/openntpd
