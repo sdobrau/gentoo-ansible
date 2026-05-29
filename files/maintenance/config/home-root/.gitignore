@@ -1,2 +1,4 @@
 patches/
 patch.patch
+node_modules
+package-lock.json
