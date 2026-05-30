@@ -49,5 +49,5 @@
 [merge]
         conflictStyle = zdiff3
 [rebase]
-autosquash = true
-updateRefs = true
+        autosquash = true
+        updateRefs = true
