@@ -1,11 +1,11 @@
 [core]
-	excludesFile = "~/.gitconfig"
+        excludesFile = "~/.gitconfig"
 [user]
-	email = serban.dobrau@gmail.com
-	name = Serban Dobrau
+        email = serban.dobrau@gmail.com
+        name = Serban Dobrau
 
 [credential]
-	helper = libsecret
+        helper = libsecret
 
 [credential "smtp://serban.dobrau%40gmail.com@smtp.gmail.com%3a587"]
     helper = !git-send-email-pass
@@ -37,15 +37,17 @@
 # path = .gitconfig-smtp
 
 [init]
-	defaultBranch = main
+        defaultBranch = main
 [core]
-	pager = delta
-	# editor = emacs
+        pager = delta
+        # editor = emacs
 [interactive]
-	diffFilter = delta --color-only
+        diffFilter = delta --color-only
 [delta]
-	navigate = true
-	dark = true
+        navigate = true
+        dark = true
 [merge]
-	conflictStyle = zdiff3
-
+        conflictStyle = zdiff3
+[rebase]
+autosquash = true
+updateRefs = true
