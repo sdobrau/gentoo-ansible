@@ -33,6 +33,7 @@ dev-python/uv
 dev-python/pipx
 dev-util/mise
 dev-util/qwen-code
+dev-vcs/git-absorb
 dev-ruby/solargraph
 dev-util/yaml-language-server
 dev-util/typescript-language-server
