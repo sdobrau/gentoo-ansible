@@ -10,6 +10,7 @@ app-accessibilty/whisper-cpp
 app-admin/ansible-lint
 app-admin/pass
 app-crypt/seahorse
+app-dicts/myspell-en
 app-editors/emacs
 app-editors/emacs-lsp-booster
 app-emulation/libvirt
@@ -27,6 +28,7 @@ app-misc/upterm
 app-portage/eix
 app-portage/gentoolkit
 app-portage/smart-live-rebuild
+app-text/enchant
 dev-go/gopls
 dev-libs/libvterm
 dev-python/uv
@@ -35,8 +37,9 @@ dev-util/mise
 dev-util/qwen-code
 dev-vcs/git-absorb
 dev-ruby/solargraph
-dev-util/yaml-language-server
+dev-util/pkgconf
 dev-util/typescript-language-server
+dev-util/yaml-language-server
 dev-util/yamllint
 gui-apps/foot
 gui-apps/hypridle
