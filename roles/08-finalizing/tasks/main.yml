@@ -106,8 +106,11 @@
     state: link
 
 # t * bin executables
-- name: ensure git-send-email-pass
+- name: ensure bins
   ansible.builtin.file:
-    src: files/bins/git-send-email-pass
-    dest: /mnt/gentoo/home/sdobrau/bin/git-send-email-pass"
+    src: files/bins/{{ item }}
+    dest: /mnt/gentoo/home/sdobrau/bin/{{ item }}"
     mode: '0755'
+  with_items:
+    - wall-auto.sh
+    - git-send-email-pass
