@@ -91,6 +91,10 @@
     - mistral:7b-instruct-v0.2-q6_K
     - mixtral:8x7b-instruct-v0.1-q3_K_M-4k
     - llama3:8b-instruct-q8_0
+    - name: ensure ollama listens on 0.0.0.0 for traffic
+      ansible.builtin.file:
+        src: files/maintenance/state/systemd-ollama-0000-override.conf
+        dest: /mnt/gentoo/etc/systemd/system/ollama.service.d/override.conf
   when: lookup('env', 'IS_LAPTOP') != '1'
 
 # t * local bin
