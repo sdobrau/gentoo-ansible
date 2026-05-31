@@ -103,13 +103,7 @@
     src: "files/maintenance/services/{{ item }}.service"
     dest: "/mnt/gentoo/home/sdobrau/.config/systemd/user/{{ item }}.service"
   with_items:
-    - foot-server
-    - hypridle
-    - hyprpaper
     - polkit
-    - wall-auto
-    - waybar
-    - wl-paste
     # for e-mail
     - notify
     - notmuch
@@ -119,13 +113,7 @@
 - name: "ensure custom service {{ item }} started and enabled"
   ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; systemctl --user enable --now {{ item }}'"
   with_items:
-    - foot-server
-    - hypridle
-    - hyprpaper
     - polkit
-    - wall-auto
-    - waybar
-    - wl-paste
     # for e-mail
     - notify
     - notmuch
