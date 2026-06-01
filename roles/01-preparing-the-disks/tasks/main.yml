@@ -104,13 +104,17 @@
         part_start: 1GiB
         part_end: 33GiB
         state: present
+      register: swap_created
 
     # TODO: make label part
     - name: make swap
       ansible.builtin.command: "mkswap --quiet /dev/nvme0n1p2"
+      when: swap_created.changed
+      register: swap_made
 
     - name: enable swap
       ansible.builtin.command: "swapon /dev/nvme0n1p2"
+      when: swap_made.changed
 
     - name: create root partition
       community.general.parted:
@@ -119,11 +123,14 @@
         fs_type: ext4
         part_end: 2.5TiB
         state: present
+      register: root_created
 
     - name: format root partition
       community.general.filesystem:
         fstype: ext4
         device: /dev/nvme0n1p3
+      when: root_created is defined
+      register: root_formatted
 
     - name: create /mnt/gentoo path
       ansible.builtin.file:
@@ -132,9 +139,13 @@
         group: root
         mode: '0777'
         state: directory
+      when: root_formatted is defined
+      register: gentoo_path_made
 
     - name: mount root partition in /mnt/gentoo
       ansible.posix.mount:
         src: /dev/nvme0n1p3
         path: /mnt/gentoo
         state: mounted
+      when: gentoo_path_made is defined
+      register: root_mounted
