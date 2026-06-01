@@ -34,7 +34,7 @@ dev-libs/libvterm
 dev-python/uv
 dev-python/pipx
 dev-util/mise
-dev-util/qwen-code
+dev-util/opencode-bin
 dev-vcs/git-absorb
 dev-ruby/asciidoctor
 dev-ruby/solargraph
