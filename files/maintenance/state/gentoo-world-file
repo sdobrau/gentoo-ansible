@@ -51,6 +51,7 @@ gui-apps/hyprshade
 gui-apps/hyprshot
 gui-apps/mako
 gui-apps/rofi-wayland
+gui-apps/slurp
 gui-apps/tofi
 gui-apps/uwsm
 gui-apps/waybar
