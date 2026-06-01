@@ -74,28 +74,52 @@
 - name: ensure package for ollama
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet app-misc/ollama'
 
-- name: ensure ollama service started
-  ansible.builtin.service:
-    name: ollama
-    state: started
-    enabled: true
-  when: lookup('env', 'IS_LAPTOP') != '1'
+- block:
+    - name: ensure ollama service started
+      ansible.builtin.service:
+        name: ollama
+        state: started
+        enabled: true
 
-- name: install ollama models
-  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; ollama pull {{ item }}'
-  with_items:
-    - qwen2.5-coder:3b
-    - qwen2.5:3b
-    - qwen2.5-coder:3b-instruct-q8_0
-    - zephyr:7b-beta-q6_K
-    - mistral:7b-instruct-v0.2-q6_K
-    - mixtral:8x7b-instruct-v0.1-q3_K_M-4k
-    - llama3:8b-instruct-q8_0
+    - name: install ollama models
+      ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; ollama pull {{ item }}'
+      with_items: {{ my_ollama_models }}
+
     - name: ensure ollama listens on 0.0.0.0 for traffic
       ansible.builtin.file:
         src: files/maintenance/state/systemd-ollama-0000-override.conf
         dest: /mnt/gentoo/etc/systemd/system/ollama.service.d/override.conf
   when: lookup('env', 'IS_LAPTOP') != '1'
+
+# laptop config
+# get ip for ollama instance from OLLAMA_IP
+
+# TODO: note in readme that OLLAMA_IP needs to be set
+
+- name: set my_ollama_instance_ip from OLLAMA_IP
+  set_fact:
+    my_ollama_instance_ip: "{{ lookup('env', 'OLLAMA_IP') }}"
+  when: lookup('env', 'IS_LAPTOP') == '1'
+
+- name: set my_ollama_instance_ip to 127.0.0.1 if not on laptop
+  set_fact:
+    my_ollama_instance_ip: "127.0.0.1"
+  when: lookup('env', 'IS_LAPTOP') != '1'
+
+# opencode
+- name: configure opencode for interacting with ollama
+  ansible.builtin.template:
+    src: templates/opencode.j2
+    dest: /mnt/gentoo/home/sdobrau/.config/opencode/opencode.json
+    owner: sdobrau
+    mode: '0755'
+
+- name: opencode dummy auth
+  ansible.builtin.file:
+    src: files/maintenance/config/opencode-dummy-auth.json
+    dest: /mnt/gentoo/home/sdobrau/.local/share/opencode/auth.json
+    owner: sdobrau
+    mode: '0755'
 
 # t * local bin
 - name: ensure local bin exists

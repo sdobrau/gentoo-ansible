@@ -1,0 +1,9 @@
+---
+my_ollama_models:
+  - qwen2.5-coder:3b
+  - qwen2.5-coder:7b
+  - qwen2.5:3b
+  - qwen2.5-coder:3b-instruct-q8_0
+  - zephyr:7b-beta-q6_K
+  - mistral:7b-instruct-v0.2-q6_K
+  - llama3:8b-instruct-q8_0

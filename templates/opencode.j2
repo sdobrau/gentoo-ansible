@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama": {
+      "name": "Ollama models",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+          "baseURL": "http://{{ my_ollama_instance_ip }}:11434/v1"
+      },
+      "models": {
+        {% for model in my_ollama_models %}
+            "{{ model }}": { "name": "{{ model }}" },
+        {% endfor %}
+      }
+    }
+  }
+}
