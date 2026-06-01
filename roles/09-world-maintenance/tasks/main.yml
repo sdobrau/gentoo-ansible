@@ -42,6 +42,7 @@
     - .gitconfig
     - hypr
     - isyncrc #mbsync
+    - chrome-flags.conf
 
 # t
 - name "ensure {{ item }} configuration in home root directory"
