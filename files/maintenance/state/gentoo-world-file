@@ -54,6 +54,7 @@ gui-apps/rofi-wayland
 gui-apps/tofi
 gui-apps/uwsm
 gui-apps/waybar
+gui-apps/wf-recorder
 gui-apps/wdisplays
 gui-apps/wmenu
 gui-wm/hyprland
