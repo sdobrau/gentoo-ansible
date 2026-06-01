@@ -114,6 +114,7 @@
   ansible.builtin.file:
     src: files/bins/{{ item }}
     dest: /mnt/gentoo/home/sdobrau/bin/{{ item }}"
+    owner: sdobrau
     mode: '0755'
   with_items:
     - wall-auto.sh
