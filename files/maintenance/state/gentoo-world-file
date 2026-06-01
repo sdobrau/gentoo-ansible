@@ -9,6 +9,8 @@ acct-group/wheel
 app-accessibilty/whisper-cpp
 app-admin/ansible-lint
 app-admin/pass
+app-containers/syft
+dev-util/trivy
 app-crypt/seahorse
 app-dicts/myspell-en
 app-editors/emacs
