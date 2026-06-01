@@ -43,6 +43,7 @@ dev-util/typescript-language-server
 dev-util/yaml-language-server
 dev-util/yamllint
 gui-apps/foot
+gui-apps/grim
 gui-apps/hypridle
 gui-apps/hyprlock
 gui-apps/hyprpaper
