@@ -1,0 +1,68 @@
+# push-stack to push all branches to origin
+[alias]
+  default-branch = "!git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'"
+  merge-base-origin ="!f() { git merge-base ${1-HEAD} origin/$(git default-branch); };f "
+  stack = "!f() { \
+  BRANCH=${1-HEAD}; \
+  MERGE_BASE=$(git merge-base-origin $BRANCH); \
+  git log --decorate-refs=refs/heads --simplify-by-decoration --pretty=format:\"%(decorate:prefix=,suffix=,tag=,separator=%n)\" $MERGE_BASE..$BRANCH; \
+  };f "
+  push-stack = "!f() { \
+  BRANCH=${1-HEAD}; \
+  git stack $BRANCH | xargs -I {} git push --force-with-lease origin {}; \
+  };f "
+
+[commit]
+  template = ~/.git_commit_template
+  
+[core]
+  excludesfile = ~/.gitignore
+
+[user]
+  email = serban.dobrau@gmail.com
+  name = "Serban Dobrau"
+
+[credential]
+  helper = libsecret
+
+[credential "smtp://serban.dobrau%40gmail.com@smtp.gmail.com%3a587"]
+  helper = !git-send-email-pass
+
+# https://gist.github.com/jasonkarns/4354421
+[sendemail]
+  confirm = always
+  compose            = yes
+  thread             = yes
+  assume8bitEncoding = UTF-8
+  annotate           = yes
+  smtpServer = smtp.gmail.com
+  smtpServerPort = 587
+  smtpEncryption = tls
+  smtpUser = serban.dobrau@gmail.com
+
+[format]
+  coverLetter  = auto
+  notes        = true
+  outputDirectory = patches
+  signOff      = no
+  useAutoBase  = true
+  numbered      = auto
+
+[am]
+  messageid = yes
+
+[init]
+  defaultBranch = main
+[core]
+  pager = delta
+  # editor = emacs
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true
+  dark = true
+[merge]
+  conflictStyle = zdiff3
+[rebase]
+  autosquash = true
+  updateRefs = true

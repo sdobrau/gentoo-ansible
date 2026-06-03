@@ -39,7 +39,6 @@
     - mpv
     - tofi
     - waybar
-    - .gitconfig
     - hypr
     - isyncrc #mbsync
     - chrome-flags.conf
@@ -54,6 +53,7 @@
   with_items:
     - .msmtprc
     - .gitconfig
+    - .git_commit_template
 
 # * home config
 - name: ensure bash profile
