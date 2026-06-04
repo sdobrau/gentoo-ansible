@@ -10,7 +10,6 @@ app-accessibilty/whisper-cpp
 app-admin/ansible-lint
 app-admin/pass
 app-containers/syft
-dev-util/trivy
 app-crypt/seahorse
 app-dicts/myspell-en
 app-editors/emacs
@@ -35,8 +34,10 @@ dev-go/gopls
 dev-libs/libvterm
 dev-python/uv
 dev-python/pipx
+dev-util/hadolint-bin # nest
 dev-util/mise
 dev-util/opencode-bin
+dev-util/trivy
 dev-vcs/git-absorb
 dev-ruby/asciidoctor
 dev-ruby/solargraph
