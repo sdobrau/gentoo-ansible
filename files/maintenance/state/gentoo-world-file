@@ -35,6 +35,7 @@ dev-libs/libvterm
 dev-python/uv
 dev-python/pipx
 dev-util/hadolint-bin # nest
+dev-util/jenkins-bin
 dev-util/mise
 dev-util/opencode-bin
 dev-util/trivy
