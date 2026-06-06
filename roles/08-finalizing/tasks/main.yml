@@ -117,6 +117,13 @@
   when: lookup('env', 'IS_LAPTOP') != '1'
 
 # opencode
+- name: Ensure opencode directory exists
+  ansible.builtin.file:
+    path: /mnt/gentoo/home/sdobrau/.config/opencode
+    state: directory
+    owner: sdobrau
+    mode: '0755'
+
 - name: configure opencode for interacting with ollama
   ansible.builtin.template:
     src: templates/opencode.j2
@@ -124,14 +131,22 @@
     owner: sdobrau
     mode: '0755'
 
-- name: opencode dummy auth
+- name: Ensure opencode .local/share exists
   ansible.builtin.file:
-    src: files/maintenance/config/opencode-dummy-auth.json
-    dest: /mnt/gentoo/home/sdobrau/.local/share/opencode/auth.json
+    path: /mnt/gentoo/home/sdobrau/.local/share/opencode
+    state: directory
     owner: sdobrau
     mode: '0755'
 
-# t * local bin
+- name: opencode dummy auth
+  ansible.builtin.copy:
+    src: files/maintenance/config/opencode-dummy-auth.json
+    dest: /mnt/gentoo/home/sdobrau/.local/share/opencode/auth.json
+    owner: sdobrau
+    group: sdobrau
+    mode: '0755'
+
+# * local bin OK
 - name: ensure local bin exists
   ansible.builtin.file:
     path: "/mnt/gentoo/home/sdobrau/.local/bin"
@@ -147,9 +162,14 @@
 
 # t * bin executables
 - name: ensure bins
+- name: ensure bin directory
   ansible.builtin.file:
-    src: files/bins/{{ item }}
-    dest: /mnt/gentoo/home/sdobrau/bin/{{ item }}"
+    path: "/mnt/gentoo/home/sdobrau/bin"
+    state: directory
+    group: sdobrau
+    owner: sdobrau
+    mode: '0755'
+
     owner: sdobrau
     mode: '0755'
   with_items:
