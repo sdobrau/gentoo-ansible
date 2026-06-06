@@ -45,9 +45,9 @@
     - github.com/google/go-containerregistry/cmd/crane@latest
     - github.com/lc/gau/v2/cmd/gau@latest
 
-# t * python packages
+# * python packages OK
 - name: ensure python packages (pipx)
-  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; pipx install {{ item }}"
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; uv tool install {{ item }}'
   with_items:
     - awscli
     - checkov

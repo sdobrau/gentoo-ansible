@@ -33,7 +33,6 @@ app-text/enchant
 dev-go/gopls
 dev-libs/libvterm
 dev-python/uv
-dev-python/pipx
 dev-util/hadolint-bin # nest
 dev-util/jenkins-bin
 dev-util/mise
