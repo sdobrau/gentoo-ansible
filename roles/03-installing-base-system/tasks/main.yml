@@ -114,19 +114,22 @@
   register: emerge_webrsyncd
   when: resolv_copied is defined
 
-- name: setup mirrorselect  # OK
-  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet --oneshot app-portage/mirrorselect --quiet'
-  # when: emerge_webrsyncd is defined
+# We don't install mirrorselect as it generates python slot conflicts.
+# lol
 
-- name: see if mirror not already conf in portage.conf
-  ansible.builtin.command: "grep --quiet GENTOO_MIRRORS /mnt/gentoo/etc/portage/make.conf"
-  register: gentoo_mirrors
+# - name: setup mirrorselect  # OK
+#   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet --oneshot app-portage/mirrorselect --quiet'
+#   # when: emerge_webrsyncd is defined
 
-- name: generate mirror and output to portage.conf  # OK
-  # hacky
-  ansible.builtin.shell: >
-    mirrorselect -c "{{ mirror_country }}" && grep GENTOO_MIRRORS /etc/portage/make.conf >> /mnt/gentoo/etc/portage/make.conf
-  when: gentoo_mirrors.rc != 0 # when not found
+# - name: see if mirror not already conf in portage.conf
+#   ansible.builtin.command: "grep --quiet GENTOO_MIRRORS /mnt/gentoo/etc/portage/make.conf"
+#   register: gentoo_mirrors
+
+# - name: generate mirror and output to portage.conf  # OK
+#   # hacky
+#   ansible.builtin.shell: >
+#     mirrorselect -c "{{ mirror_country }}" && grep GENTOO_MIRRORS /etc/portage/make.conf >> /mnt/gentoo/etc/portage/make.conf
+#   when: gentoo_mirrors.rc != 0 # when not found
 
 - name: copy rsync mirrors  # OK
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; mkdir /etc/portage/repos.conf && cp /usr/share/portage/config/repos.conf /etc/portage/repos.conf/gentoo.conf'
