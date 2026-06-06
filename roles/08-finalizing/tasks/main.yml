@@ -40,7 +40,7 @@
 
 # * go packages
 - name: ensure go packages (golang)
-  ansible.bultin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; go install {{ item }}"
+  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; go install {{ item }}"
   with_items:
     - github.com/google/go-containerregistry/cmd/crane@latest
     - github.com/lc/gau/v2/cmd/gau@latest
