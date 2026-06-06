@@ -55,7 +55,7 @@
 
 # t * node packages
 - name: ensure jsfmt
-  ansible.builtin.command: "chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; npm install -g jsfmt"
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; npm install -g jsfmt'
 
 # * standalone packages
 - name: ensure tflint
