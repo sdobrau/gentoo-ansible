@@ -19,6 +19,7 @@ app-emulation/qemu
 app-emulation/virt-manager
 app-i18n/fcitx5
 app-i18n/mozc
+app-misc/anki
 app-misc/brightnessctl
 app-misc/cliphist
 app-misc/dtach
@@ -82,6 +83,7 @@ net-libs/nodejs
 net-mail/notmuch
 net-misc/openntpd
 net-p2p/nicotine+
+net-p2p/qbittorrent
 sys-apps/lshw
 sys-apps/systemd
 sys-apps/corepack
