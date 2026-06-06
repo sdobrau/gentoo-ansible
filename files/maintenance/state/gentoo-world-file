@@ -87,6 +87,7 @@ sys-apps/lshw
 sys-apps/systemd
 sys-apps/corepack
 sys-apps/lm-sensors
+sys-boot/mkusb
 sys-block/parted
 sys-kernel/gentoo-kernel-bin
 sys-kernel/installkernel
