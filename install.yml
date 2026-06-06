@@ -11,19 +11,18 @@
       prompt: what timezone?
       default: "Europe/London"
       private: false
+    - name: is_laptop
+      prompt: "Are you running this on a laptop? Use 1 if yes"
+    - name: my_ollama_instance_ip
+      prompt: "What is the IP of the Ollama instance you're running?"
+    - name: is_virtual
+      prompt: "Are you running on a virtual machine? Use 1 if yes"
+    - name: is_nvme
+      prompt: "Are you using NVMe disks? Use 1 if yes"
+    - name: is_mmc
+      prompt: "Are you using MMC storage? Use 1 if yes"
   vars_files:
     - vars/main.yml
-  vars_prompt:
-    - name: "is_laptop"
-      prompt: "Are you running this on a laptop? Use 1 if yes"
-    - name: "my_ollama_instance_ip"
-      prompt: "What is the IP of the Ollama instance you're running?"
-    - name: "is_virtual"
-      prompt: "Are you running on a virtual machine? Use 1 if yes"
-    - name: "is_nvme"
-      prompt: "Are you using NVMe disks? Use 1 if yes"
-    - name: "is_mmc"
-      prompt: "Are you using MMC storage? Use 1 if yes"
   roles:
     - role: 01-preparing-the-disks  # OK?
     - role: 02-the-stage-file  # OK
