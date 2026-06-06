@@ -70,23 +70,25 @@
 - name: ensure Hyprland split-monitor-workspaces configured
   ansible.builtin.command:  chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; hyprpm -f add https://github.com/zjeffer/split-monitor-workspaces && hyprpm enable -f split-monitor-workspaces && hyprpm reload'
 
-# t * ollama
+# * ollama OK
 - name: ensure package for ollama
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet app-misc/ollama'
 
 - block:
-    - name: ensure ollama service started
-      ansible.builtin.service:
-        name: ollama
-        state: started
-        enabled: true
-
     - name: install ollama models
-      ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; ollama pull {{ item }}'
-      with_items: {{ my_ollama_models }}
+      ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; ollama pull {{ item }}'
+      with_items: "{{ my_ollama_models }}"
+
+    - name: ensure ollama service override directory exists
+      ansible.builtin.file:
+        path: /mnt/gentoo/etc/systemd/system/ollama.service.d/
+        group: root
+        owner: root
+        state: directory
+        mode: '0755'
 
     - name: ensure ollama listens on 0.0.0.0 for traffic
-      ansible.builtin.file:
+      ansible.builtin.copy:
         src: files/maintenance/state/systemd-ollama-0000-override.conf
         dest: /mnt/gentoo/etc/systemd/system/ollama.service.d/override.conf
   when: lookup('env', 'IS_LAPTOP') != '1'
@@ -100,10 +102,18 @@
   set_fact:
     my_ollama_instance_ip: "{{ lookup('env', 'OLLAMA_IP') }}"
   when: lookup('env', 'IS_LAPTOP') == '1'
+    - name: Reload systemd manager configuration
+      ansible.builtin.systemd:
+        daemon_reload: yes
 
 - name: set my_ollama_instance_ip to 127.0.0.1 if not on laptop
   set_fact:
     my_ollama_instance_ip: "127.0.0.1"
+    - name: ensure ollama service started
+      ansible.builtin.service:
+        name: ollama
+        state: started
+        enabled: true
   when: lookup('env', 'IS_LAPTOP') != '1'
 
 # opencode
