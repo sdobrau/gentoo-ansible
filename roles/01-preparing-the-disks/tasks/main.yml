@@ -1,8 +1,80 @@
 ---
 
+# TODO: test on live sys and add register+whens
+- name: Setup partitions for gentoo mmcblk0p style  # OK
+  when: is_mmc == "1"
   block:
+    - name: create msdos label  # OK
+      ansible.builtin.command: "parted -s /dev/mmcblk0 mklabel msdos"
 
+    - name: create boot partition  # OK
+      ansible.builtin.command: "parted -s /dev/mmcblk0 mkpart primary fat32 2048s 1GiB"
+      # creates: /dev/vda1
+      register: boot_created
 
+    - name: format boot partition  # OK
+      # use command instead of module to be sure
+      ansible.builtin.command: "mkfs.vfat -F32 /dev/mmcblk0p1"
+      register: boot_formatted
+
+    # TODO / NOTE cannot set type to efi
+    - name: create swap partition  # OK
+      community.general.parted:
+        device: /dev/mmcblk0
+        number: 2
+        part_start: 1GiB
+        part_end: 5GiB
+        state: present
+      register: swap_created
+
+    - name: make swap  # OK
+      ansible.builtin.command: "mkswap /dev/mmcblk0p2"
+      when: swap_created.changed
+      register: swap_made
+
+    - name: enable swap  # OK
+      ansible.builtin.command: "swapon /dev/mmcblk0p2"
+      when: swap_made.changed
+
+    - name: create root partition  # OK
+      community.general.parted:
+        device: /dev/mmcblk0
+        number: 3
+        fs_type: ext4
+        part_start: 5GiB
+        part_end: 55GiB
+        state: present
+      register: root_created
+
+    - name: format root partition  # OK
+      community.general.filesystem:
+        fstype: ext4
+        device: /dev/mmcblk0p3
+      when: root_created is defined
+      register: root_formatted
+
+    - name: create /mnt/gentoo path  # OK
+      ansible.builtin.file:
+        path: /mnt/gentoo
+        owner: root
+        group: root
+        mode: '0777'
+        state: directory
+      when: root_formatted is defined
+      register: gentoo_path_made
+
+    - name: mount root partition in /mnt/gentoo  # OK
+      ansible.posix.mount:
+        src: /dev/mmcblk0p3
+        path: /mnt/gentoo
+        fstype: ext4
+        state: mounted
+      when: gentoo_path_made is defined
+      register: root_mounted
+
+- name: Setup partitions for gentoo vda style  # OK
+  when: is_virtual == "1"
+  block:
     - name: create msdos label  # OK
       ansible.builtin.command: "parted -s /dev/vda mklabel msdos"
 
