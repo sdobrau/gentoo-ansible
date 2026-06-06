@@ -160,8 +160,6 @@
     dest: "/home/sdobrau/bin"
     state: link
 
-# t * bin executables
-- name: ensure bins
 - name: ensure bin directory
   ansible.builtin.file:
     path: "/mnt/gentoo/home/sdobrau/bin"
@@ -170,6 +168,12 @@
     owner: sdobrau
     mode: '0755'
 
+# * bin executables OK
+- name: ensure bins
+  ansible.builtin.copy:
+    src: "files/bins/{{ item }}"
+    dest: "/mnt/gentoo/home/sdobrau/bin/{{ item }}"
+    group: sdobrau
     owner: sdobrau
     mode: '0755'
   with_items:
