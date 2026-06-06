@@ -91,24 +91,11 @@
       ansible.builtin.copy:
         src: files/maintenance/state/systemd-ollama-0000-override.conf
         dest: /mnt/gentoo/etc/systemd/system/ollama.service.d/override.conf
-  when: lookup('env', 'IS_LAPTOP') != '1'
 
-# laptop config
-# get ip for ollama instance from OLLAMA_IP
-
-# TODO: note in readme that OLLAMA_IP needs to be set
-
-- name: set my_ollama_instance_ip from OLLAMA_IP
-  set_fact:
-    my_ollama_instance_ip: "{{ lookup('env', 'OLLAMA_IP') }}"
-  when: lookup('env', 'IS_LAPTOP') == '1'
     - name: Reload systemd manager configuration
       ansible.builtin.systemd:
         daemon_reload: yes
 
-- name: set my_ollama_instance_ip to 127.0.0.1 if not on laptop
-  set_fact:
-    my_ollama_instance_ip: "127.0.0.1"
     - name: ensure ollama service started
       ansible.builtin.service:
         name: ollama
