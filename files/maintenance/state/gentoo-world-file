@@ -85,10 +85,11 @@ net-mail/notmuch
 net-misc/openntpd
 net-p2p/nicotine+
 net-p2p/qbittorrent
+sys-apps/corepack
+sys-apps/fd
+sys-apps/lm-sensors
 sys-apps/lshw
 sys-apps/systemd
-sys-apps/corepack
-sys-apps/lm-sensors
 sys-boot/mkusb
 sys-block/parted
 sys-kernel/gentoo-kernel-bin
