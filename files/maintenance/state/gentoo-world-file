@@ -64,6 +64,7 @@ gui-apps/wf-recorder
 gui-apps/wdisplays
 gui-apps/wmenu
 gui-wm/hyprland
+kde-apps/filelight
 mail-mta/msmtp
 media-fonts/fonts-meta
 media-fonts/noto-cjk
