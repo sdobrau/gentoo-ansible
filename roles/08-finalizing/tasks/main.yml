@@ -57,6 +57,7 @@
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; gem install {{ item }}'
   with_items:
     - solargraph
+    - rubocop
 
 # t * node packages
 - name: ensure jsfmt
