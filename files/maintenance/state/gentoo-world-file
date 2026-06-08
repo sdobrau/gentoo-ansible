@@ -11,7 +11,7 @@ app-admin/ansible-lint
 app-admin/pass
 app-containers/syft
 app-crypt/seahorse
-app-dicts/myspell-en
+app-dicts/aspell-en
 app-editors/emacs
 app-editors/emacs-lsp-booster
 app-emulation/libvirt
