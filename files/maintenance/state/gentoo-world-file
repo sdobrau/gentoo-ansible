@@ -32,6 +32,8 @@ app-portage/gentoolkit
 app-portage/smart-live-rebuild
 app-text/enchant
 dev-go/gopls
+dev-lang/ruby
+dev-lang/python
 dev-libs/libvterm
 dev-python/uv
 dev-util/hadolint-bin # nest

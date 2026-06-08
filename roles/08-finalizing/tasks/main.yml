@@ -16,7 +16,6 @@
   ansible.builtin.debug:
     msg: "Done configuring. now just ensuring world"
 
-# t
 - name: ensure package.use directory exists
   ansible.builtin.file:
     path: /mnt/gentoo/etc/portage/package.use
@@ -30,7 +29,7 @@
     mode: '0644'
 
 - name: ensure packages for non-native packages
-  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-misc/curl net-misc/wget dev-python/pipx dev-lang/rust-bin dev-lang/go net-libs/nodejs'
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet net-misc/curl net-misc/wget dev-python/uv dev-lang/rust-bin dev-lang/go net-libs/nodejs dev-lang/ruby'
 
 # * rust packages
 - name: ensure cargo packages (cargo)
@@ -46,12 +45,18 @@
     - github.com/lc/gau/v2/cmd/gau@latest
 
 # * python packages OK
-- name: ensure python packages (pipx)
+- name: ensure python packages (uv)
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; uv tool install {{ item }}'
   with_items:
     - awscli
     - checkov
     - zuban
+
+# * ruby packages OK
+- name: ensure ruby packages (pipx)
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; gem install {{ item }}'
+  with_items:
+    - solargraph
 
 # t * node packages
 - name: ensure jsfmt
