@@ -172,3 +172,10 @@
   with_items:
     - wall-auto.sh
     - git-send-email-pass
+
+# t for tagaini jisho
+- name: oneshot qt6
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --oneshot dev-qt/qtbase'
+
+- name: fetch and install tagaini jisho
+  ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; cd /tmp; git clone https://github.com/Gnurou/tagainijisho; cd tagainijisho; cmake -B build -GNinja; ninja -C build; ninja -C build install; cd /tmp; rm -rf /tmp/tagainijisho'
