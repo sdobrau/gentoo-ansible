@@ -42,6 +42,7 @@
     - hypr
     - isyncrc #mbsync
     - chrome-flags.conf
+    - fcitx5
 
 # t
 - name "ensure {{ item }} configuration in home root directory"
