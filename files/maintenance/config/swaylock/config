@@ -1,0 +1,48 @@
+# Basic appearance
+color=050505
+
+text-ver-color=bbbbbb
+bs-hl-color=4caf50
+
+ring-color=252525
+ring-clear-color=1b3a1b
+ring-caps-lock-color=2e5a2e
+ring-ver-color=66bb6a
+ring-wrong-color=81c784
+
+key-hl-color=4caf50
+text-color=ffffff
+line-color=006400
+inside-color=1b2a1b
+inside-clear-color=1f3320
+inside-ver-color=223822
+inside-wrong-color=2a3d2a
+
+separator-color=00000000
+
+# Layout / dimensions
+font=Victor Mono
+font-size=11
+indicator-radius=35
+indicator-thickness=1
+clock
+datestr=%Y-%m-%d
+timestr=%H:%M:%S
+
+# Behavior
+ignore-empty-password
+show-failed-attempts
+show-keyboard-layout
+grace=2
+indicator
+effect-blur=0x5
+effect-vignette=0.2:0.5
+
+# Input
+caps-lock-key=off
+num-lock-key=off
+
+# Compatibility / misc
+daemonize
+cursor-theme=default
+cursor-size=24

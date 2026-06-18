@@ -38,12 +38,11 @@
     mode: '0755'
   with_items:
     - mpv
-    - tofi
-    - waybar
-    - hypr
     - isyncrc #mbsync
     - chrome-flags.conf
     - fcitx5
+    - sway
+    - rofi
 
 # t
 - name "ensure {{ item }} configuration in home root directory"

@@ -73,8 +73,6 @@
 - name: ensure parallel
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; cd /tmp; wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2 && wget https://ftpmirror.gnu.org/parallel/parallel-20260322.tar.bz2.sig && gpg parallel-20260322.tar.bz2.sig && bzip2 -dc parallel-20260322.tar.bz2 | tar xvf - && cd parallel-20260322 && ./configure && make && sudo make install && cd ../ && rm -rf parallel*'
 
-- name: ensure Hyprland split-monitor-workspaces configured
-  ansible.builtin.command:  chroot /mnt/gentoo bash -c 'source /etc/profile; su - sdobrau; hyprpm -f add https://github.com/zjeffer/split-monitor-workspaces && hyprpm enable -f split-monitor-workspaces && hyprpm reload'
 
 # * ollama OK
 - name: ensure package for ollama
