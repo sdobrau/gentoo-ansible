@@ -123,6 +123,15 @@
     # emacs
     - emacs-daemon
 
+# * pulseaudio config
+- name: ensure low-usage pulseaudio config
+  ansible.builtin.copy:
+    src: files/maintenance/config/pulseaudio-daemon.conf
+    dest: /mnt/gentoo/etc/pulseaudio/daemon.conf
+    owner: root
+    group: root
+    mode: '0644'
+
 # * ssh config
 - name: ensure ssh directory exists
   ansible.builtin.file:
