@@ -13,6 +13,7 @@
     dest: /mnt/gentoo/var/lib/portage/world
     owner: root
     group: portage
+    mode: '0644'
 
 - name: update @world without chromium (idempotent)
   ansible.builtin.command: chroot /mnt/gentoo bash -c 'source /etc/profile; emerge --quiet --update --deep --newuse @world --exclude www-client/chromium --exclude www-client/chromium:stable'
