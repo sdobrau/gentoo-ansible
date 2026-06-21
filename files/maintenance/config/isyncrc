@@ -9,14 +9,12 @@ TLSType IMAPS
 # AuthMechs XOAUTH2
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-# Local mailbox falko.riemenschneider@gmail.com
 MaildirStore serban.dobrau@gmail.com-local
 Subfolders Verbatim
 Path ~/Mail/serban.dobrau@gmail.com/
 INBOX ~/Mail/serban.dobrau@gmail.com/INBOX
-Flatten .
+Trash ~/Mail/serban.dobrau@gmail.com/[Gmail]/Trash
 
-# Syncronization falko.riemenschneider@gmail.com
 Channel serban.dobrau@gmail.com
 Far :serban.dobrau@gmail.com-remote:
 Near :serban.dobrau@gmail.com-local:
